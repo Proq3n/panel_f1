@@ -10,6 +10,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    build-essential \
+    gcc \
+    g++ \
+    python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Önce requirements.txt'yi kopyala
@@ -18,8 +22,9 @@ COPY requirements.txt /app/requirements.txt
 # pip'i güncelle
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-# Bağımlılıkları yükle
-RUN pip install --no-cache-dir -r /app/requirements.txt
+# pycares için önce build dependencies yükle, sonra diğer paketleri
+RUN pip install --no-cache-dir cffi && \
+    pip install --no-cache-dir -r /app/requirements.txt
 
 COPY handler.py model.py utils.py /app/
 COPY models /app/models
