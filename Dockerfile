@@ -18,11 +18,8 @@ COPY requirements.txt /app/requirements.txt
 # pip'i güncelle
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-# Bağımlılıkları yükle (torch base image'de zaten var)
-RUN pip install --no-cache-dir -r /app/requirements.txt || \
-    (echo "Pip install hatası, tekrar deniyorum..." && \
-     pip install --no-cache-dir --upgrade pip && \
-     pip install --no-cache-dir -r /app/requirements.txt)
+# Bağımlılıkları yükle
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY handler.py model.py utils.py /app/
 COPY models /app/models
