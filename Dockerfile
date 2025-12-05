@@ -23,7 +23,9 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
 # pycares için önce build dependencies yükle, sonra diğer paketleri
+# numpy'yi önce yükle (base image'de olabilir ama versiyon uyumsuzluğu olabilir)
 RUN pip install --no-cache-dir cffi && \
+    pip install --no-cache-dir numpy>=1.24.0 && \
     pip install --no-cache-dir -r /app/requirements.txt
 
 COPY handler.py model.py utils.py /app/
